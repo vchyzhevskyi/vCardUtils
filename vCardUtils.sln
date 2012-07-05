@@ -5,6 +5,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vCardUtils", "vCardUtils\vC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vCardTest", "vCardTest\vCardTest.csproj", "{08BD22F7-25CB-45AC-9163-D8893EF42FB9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7356A548-9353-4331-95F4-A4865EB11697}"
+	ProjectSection(SolutionItems) = preProject
+		license.txt = license.txt
+		readme.txt = readme.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -15,6 +15,7 @@ namespace vCardUtils
 		public string Nickname { get; private set; }
 		public Telephone[] Telephone { get; set; }
 		public Email[] Email { get; private set; }
+		public string Mailer { get; private set; }
 
 		public vCard()
 		{
@@ -64,6 +65,8 @@ namespace vCardUtils
 							tmp.CopyTo(Email, 0);
 							Email[tmp.Length] = parsedLine[1] as Email;
 						}
+						else if((parsedLine[0] as string).Equals("mailer"))
+							Mailer = parsedLine[1] as string;
 					}
 					catch (Exception ex)
 					{
@@ -146,6 +149,13 @@ namespace vCardUtils
 							};
 							for (int i = 0; i < mb.Count; i++)
 								(res[1] as Email).Type[i] = (EmailType)Enum.Parse(typeof(EmailType), mb[i].Value, true);
+							return res;
+						}
+					case "mailer":
+						{
+							Match ma = Regex.Match(line, ":(?<mailer>[\w\d\s\W]+)$");
+							res[0] = "mailer";
+							res[1] = ma.Groups["mailer"].Value;
 							return res;
 						}
 					default:
