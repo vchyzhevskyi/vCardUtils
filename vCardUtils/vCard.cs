@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace vCardUtils
 {
@@ -13,7 +13,9 @@ namespace vCardUtils
 		public float Version { get; private set; }
 		public Name Name { get; private set; }
 		public string Nickname { get; private set; }
-		public Telephone[] Telephone { get; set; }
+		public Bitmap Photo { get; private set; }
+		public DateTime Birthday { get; private set; }
+		public Telephone[] Telephone { get; private set; }
 		public Email[] Email { get; private set; }
 		public string Mailer { get; private set; }
 
@@ -30,10 +32,14 @@ namespace vCardUtils
 
 		private void Init()
 		{
+			Version = 0;
 			Name = new Name();
 			Nickname = string.Empty;
+			Photo = null;
+			Birthday = new DateTime();
 			Telephone = new Telephone[0];
 			Email = new Email[0];
+			Mailer = string.Empty;
 		}
 
 		public void Load(string path)
@@ -45,28 +51,57 @@ namespace vCardUtils
 					try
 					{
 						object[] parsedLine = ParseLine(line);
-						if ((parsedLine[0] as string).Equals("version"))
-							Version = (float)parsedLine[1];
-						else if ((parsedLine[0] as string).Equals("n"))
-							Name = parsedLine[1] as Name;
-						else if ((parsedLine[0] as string).Equals("nickname"))
-							Nickname = parsedLine[1] as string;
-						else if ((parsedLine[0] as string).Equals("tel"))
+						switch ((parsedLine[0] as string))
 						{
-							Telephone[] tmp = Telephone;
-							Telephone = new Telephone[tmp.Length + 1];
-							tmp.CopyTo(Telephone, 0);
-							Telephone[tmp.Length] = parsedLine[1] as Telephone;
+							case "version":
+								{
+									Version = (float)parsedLine[1];
+									break;
+								}
+							case "n":
+								{
+									Name = parsedLine[1] as Name;
+									break;
+								}
+							case "nickname":
+								{
+									Nickname = parsedLine[1] as string;
+									break;
+								}
+							case "photo":
+								{
+									Photo = parsedLine[1] as Bitmap;
+									break;
+								}
+							case "bday":
+								{
+									Birthday = (DateTime)parsedLine[1];
+									break;
+								}
+							case "tel":
+								{
+									Telephone[] tmp = Telephone;
+									Telephone = new Telephone[tmp.Length + 1];
+									tmp.CopyTo(Telephone, 0);
+									Telephone[tmp.Length] = parsedLine[1] as Telephone;
+									break;
+								}
+							case "email":
+								{
+									Email[] tmp = Email;
+									Email = new Email[tmp.Length + 1];
+									tmp.CopyTo(Email, 0);
+									Email[tmp.Length] = parsedLine[1] as Email;
+									break;
+								}
+							case "mailer":
+								{
+									Mailer = parsedLine[1] as string;
+									break;
+								}
+							default:
+								break;
 						}
-						else if ((parsedLine[0] as string).Equals("email"))
-						{
-							Email[] tmp = Email;
-							Email = new Email[tmp.Length + 1];
-							tmp.CopyTo(Email, 0);
-							Email[tmp.Length] = parsedLine[1] as Email;
-						}
-						else if((parsedLine[0] as string).Equals("mailer"))
-							Mailer = parsedLine[1] as string;
 					}
 					catch (Exception ex)
 					{
@@ -115,6 +150,24 @@ namespace vCardUtils
 							res[1] = ma.Groups["nickname"].Value;
 							return res;
 						}
+					case "photo":
+						{
+							Match ma = Regex.Match(line, "=(?<encoding>.);");
+							res[0] = "photo";
+							res[1] = null;
+							if (ma.Success)
+							{
+								Match mb = Regex.Match(line, @"(?<binarydata>[\w]+)$");
+								res[1] = new Bitmap(new MemoryStream(Encoding.ASCII.GetBytes(mb.Groups["binarydata"].Value)));
+							}
+							else
+							{
+								Match mb = Regex.Match(line, @":(?<value>[\w\W]+)$");
+								byte[] data = new WebClient().DownloadData(new Uri(mb.Groups["value"].Value));
+								res[1] = new Bitmap(new MemoryStream(data));
+							}
+							return res;
+						}
 					case "bday":
 						{
 							Match ma = Regex.Match(line, ":(?<date>[0-9-:TtZz,]*)$");
@@ -153,7 +206,7 @@ namespace vCardUtils
 						}
 					case "mailer":
 						{
-							Match ma = Regex.Match(line, ":(?<mailer>[\w\d\s\W]+)$");
+							Match ma = Regex.Match(line, @":(?<mailer>[\w\d\s\W]+)$");
 							res[0] = "mailer";
 							res[1] = ma.Groups["mailer"].Value;
 							return res;

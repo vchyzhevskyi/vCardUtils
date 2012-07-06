@@ -1,4 +1,4 @@
-vCardUtils - it's an open source library (class library) for vCard processing in C#.
+vCardUtils - it's an open source library (class library) for vCard processing in C#. Supported .NET Framework 4.0+
 Published under MS-PL license conditions.
 =====
 Changelog:
