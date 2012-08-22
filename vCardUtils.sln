@@ -1,9 +1,6 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vCardUtils", "vCardUtils\vCardUtils.csproj", "{D83616AF-584F-499A-AEF9-BCFD77264839}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vCardTest", "vCardTest\vCardTest.csproj", "{08BD22F7-25CB-45AC-9163-D8893EF42FB9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7356A548-9353-4331-95F4-A4865EB11697}"
 	ProjectSection(SolutionItems) = preProject
@@ -17,10 +14,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{08BD22F7-25CB-45AC-9163-D8893EF42FB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{08BD22F7-25CB-45AC-9163-D8893EF42FB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{08BD22F7-25CB-45AC-9163-D8893EF42FB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{08BD22F7-25CB-45AC-9163-D8893EF42FB9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D83616AF-584F-499A-AEF9-BCFD77264839}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D83616AF-584F-499A-AEF9-BCFD77264839}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D83616AF-584F-499A-AEF9-BCFD77264839}.Release|Any CPU.ActiveCfg = Release|Any CPU
